@@ -1,6 +1,12 @@
 var express = require('express');
 var mongoose = require('mongoose');
 
+var db = mongoose.connect('mongodb://localhost/bookAPI', {
+    useMongoClient: true
+});
+
+var Book = require('./models/bookSchema');
+
 var app = express();
 
 var port = process.env.PORT || 3000;
@@ -9,8 +15,12 @@ var bookRouter = express.Router();
 
 bookRouter.route('/books')
     .get(function (req, res) {
-        var resJson = { name: 'Bruno' };
-        res.json(resJson);
+        Book.find(function (err, books) {
+            if (err) res.status(500).send(err);
+            else {
+                res.json(books);
+            }
+        });
     });
 
 app.use('/api', bookRouter);
