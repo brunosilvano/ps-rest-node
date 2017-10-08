@@ -45,8 +45,21 @@ var routes = function (Book) {
             book.author = req.body.author;
             book.genre = req.body.genre;
             book.read = req.body.read;
-            book.save();
-            res.json(book);
+            book.save(function (err) {
+                if (err) res.status(500).send(err);
+                else res.json(book);
+            });
+        })
+        .patch(function (req, res) {
+            if (req.body._id) delete req.body._id;
+            var book = req.book;
+            for (var key in req.body) {
+                book[key] = req.body[key];
+            }
+            book.save(function (err) {
+                if (err) res.status(500).send(err);
+                else res.json(book);
+            });
         });
     return bookRouter;
 };
