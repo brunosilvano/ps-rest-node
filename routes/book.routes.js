@@ -7,7 +7,7 @@ var routes = function (Book) {
         .post(function (req, res) {
             var book = new Book(req.body);
             book.save();
-            res.status(201).tsend(book);
+            res.status(201).send(book);
         })
         .get(function (req, res) {
             var query = {};
@@ -59,6 +59,12 @@ var routes = function (Book) {
             book.save(function (err) {
                 if (err) res.status(500).send(err);
                 else res.json(book);
+            });
+        })
+        .delete(function (req, res) {
+            req.book.remove(function (err) {
+                if (err) res.status(500).send(err);
+                else res.status(204).send('Removed');
             });
         });
     return bookRouter;
